@@ -53,12 +53,11 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == users.count - 1 {
+        if indexPath.row == users.count - 6 {
             downloadUsers()
         }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserListCell", for: indexPath) as? UserListCell else { return UITableViewCell() }
-        
         cell.configure(with: users[indexPath.row])
         
         return cell
