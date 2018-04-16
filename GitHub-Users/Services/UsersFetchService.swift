@@ -10,14 +10,20 @@ import Foundation
 import WebLinking
 
 class UsersFetchService {
-    private var downloadURL: String
+    private var downloadURL: String?
     
     init(stringUrl: String) {
         downloadURL = stringUrl
     }
     
     func downloadUsers(completion: @escaping (_ users: [User]) -> Void) {
-        guard let url = URL(string: downloadURL) else {
+        guard let nextURL = downloadURL else {
+            print("no next download link")
+            completion([])
+            return
+        }
+        
+        guard let url = URL(string: nextURL) else {
             print("invalid users download url")
             completion([])
             return
@@ -35,12 +41,9 @@ class UsersFetchService {
                     return
                 }
                 
-                if let link = httpResponse.findLink(relation: "next") {
-                    self.downloadURL = link.uri
-                }
+                self.downloadURL = httpResponse.findLink(relation: "next")?.uri ?? nil
                 
                 let users = try JSONDecoder().decode([User].self, from: usersData)
-                
                 completion(users)
             } catch let error as NSError {
                 print(error)
