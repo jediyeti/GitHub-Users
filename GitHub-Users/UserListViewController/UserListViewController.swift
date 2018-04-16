@@ -31,10 +31,12 @@ class UserListViewController: UIViewController {
     
     private func downloadUsers() {
         usersFetcher?.downloadUsers { (downloadedUsers) in
-            self.users.append(contentsOf: downloadedUsers)
-            
-            DispatchQueue.main.async {
-                self.usersTableView.reloadData()
+            if !downloadedUsers.isEmpty {
+                self.users.append(contentsOf: downloadedUsers)
+                
+                DispatchQueue.main.async {
+                    self.usersTableView.reloadData()
+                }
             }
         }
     }
